@@ -16,15 +16,16 @@ export default function LoginIllustration() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        overflow: 'hidden',
+        overflow: 'visible',
+        padding: '20px',
       }}
     >
       {/* Círculo grande central com Liquid Glass premium */}
       <Box
         sx={{
           position: 'absolute',
-          width: 220,
-          height: 220,
+          width: 200,
+          height: 200,
           borderRadius: '50%',
           background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%)',
           border: '1.5px solid rgba(255, 255, 255, 0.2)',
@@ -36,12 +37,15 @@ export default function LoginIllustration() {
           `,
           animation: 'float 12s ease-in-out infinite',
           zIndex: 2,
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
           '@keyframes float': {
             '0%, 100%': {
-              transform: 'translateY(0px) scale(1)',
+              transform: 'translate(-50%, -50%) translateY(0px) scale(1)',
             },
             '50%': {
-              transform: 'translateY(-25px) scale(1.03)',
+              transform: 'translate(-50%, -50%) translateY(-20px) scale(1.02)',
             },
           },
         }}
@@ -159,12 +163,12 @@ export default function LoginIllustration() {
 
       {/* Círculos decorativos com Liquid Glass */}
       {[
-        { top: '8%', right: '12%', size: 100, delay: 0.5 },
-        { bottom: '12%', left: '8%', size: 75, delay: 1 },
-        { bottom: '18%', right: '18%', size: 90, delay: 1.5 },
-        { top: '18%', left: '12%', size: 60, delay: 0.7 },
-        { top: '3%', right: '3%', size: 45, delay: 2 },
-        { bottom: '3%', left: '3%', size: 50, delay: 2.5 },
+        { top: '10%', right: '15%', size: 90, delay: 0.5 },
+        { bottom: '15%', left: '10%', size: 70, delay: 1 },
+        { bottom: '20%', right: '20%', size: 80, delay: 1.5 },
+        { top: '20%', left: '15%', size: 55, delay: 0.7 },
+        { top: '5%', right: '5%', size: 40, delay: 2 },
+        { bottom: '5%', left: '5%', size: 45, delay: 2.5 },
       ].map((circle, i) => (
         <Box
           key={i}
