@@ -81,6 +81,16 @@ yarn preview
 pnpm preview
 ```
 
+### Docker (Produção)
+```bash
+# Build e executar com Docker Compose
+docker-compose up --build
+
+# A aplicação estará disponível em http://localhost:3000
+```
+
+Para mais detalhes sobre Docker, consulte [DOCKER.md](./DOCKER.md)
+
 ## 📁 Estrutura do Projeto
 
 ```
