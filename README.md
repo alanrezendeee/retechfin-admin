@@ -9,14 +9,16 @@ Este projeto utiliza as melhores tecnologias do mercado para desenvolvimento fro
 - **[React 18](https://react.dev/)** - Biblioteca JavaScript para construção de interfaces
 - **[Vite](https://vitejs.dev/)** - Build tool rápida e moderna
 - **[TypeScript](https://www.typescriptlang.org/)** - Tipagem estática para JavaScript
-- **[Tailwind CSS](https://tailwindcss.com/)** - Framework CSS utility-first
+- **[MUI (Material-UI)](https://mui.com/)** - Biblioteca de componentes React com Material Design
+- **[Emotion](https://emotion.sh/)** - Biblioteca CSS-in-JS (usada pelo MUI)
 - **[React Query (TanStack Query)](https://tanstack.com/query/latest)** - Gerenciamento de estado do servidor e cache
 - **[Zustand](https://zustand-demo.pmnd.rs/)** - Gerenciamento de estado global leve e simples
 - **[React Hook Form](https://react-hook-form.com/)** - Formulários performáticos com validação
 - **[Zod](https://zod.dev/)** - Validação de schemas TypeScript-first
 - **[React Router](https://reactrouter.com/)** - Roteamento declarativo para React
 - **[Axios](https://axios-http.com/)** - Cliente HTTP baseado em Promises
-- **[Lucide React](https://lucide.dev/)** - Biblioteca de ícones moderna e consistente
+- **[MUI Icons](https://mui.com/material-ui/material-icons/)** - Biblioteca de ícones Material Design
+- **[Recharts](https://recharts.org/)** - Biblioteca de gráficos para React
 - **[date-fns](https://date-fns.org/)** - Utilitários para manipulação de datas
 
 ## 📋 Pré-requisitos
@@ -111,7 +113,7 @@ retechfin-admin/
 ├── package.json
 ├── tsconfig.json
 ├── tsconfig.node.json
-├── tailwind.config.js
+├── theme.ts              # Configuração do tema MUI
 ├── vite.config.ts
 └── README.md
 ```
@@ -158,9 +160,10 @@ retechfin-admin/
 - **React Hook Form**: Estado de formulários
 
 ### Estilização
-- Tailwind CSS para estilização
-- Design system consistente
-- Responsividade mobile-first
+- MUI (Material-UI) para componentes base
+- Emotion para estilização customizada
+- Sistema de temas personalizável
+- Design system consistente e responsivo
 
 ### Validação
 - Zod para validação de schemas
@@ -204,4 +207,4 @@ ReTech - Soluções em Tecnologia
 ---
 
 **Versão:** 1.0.0  
-**Última atualização:** 2024
+**Última atualização:** Janeiro 2026
