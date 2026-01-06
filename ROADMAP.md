@@ -9,7 +9,7 @@ Sistema de Gestão Financeira Familiar - Planejamento Completo
 
 ## 📋 Visão Geral
 
-Sistema completo para gestão financeira familiar, permitindo controle total sobre receitas, despesas, contas bancárias, cartões de crédito, financiamentos e patrimônio (bens).
+Sistema completo para gestão financeira familiar, permitindo controle total sobre receitas, despesas, contas bancárias, cartões de crédito, financiamentos, patrimônio (bens) e **planos de conquistas familiares** - objetivos compartilhados que podem ser alcançados através de economia, investimentos e colaboração familiar.
 
 ---
 
@@ -20,6 +20,7 @@ Sistema completo para gestão financeira familiar, permitindo controle total sob
 - **Organização**: Centralizar todas as informações financeiras em um único lugar
 - **Inteligência**: Fornecer insights e análises para tomada de decisão
 - **Colaboração**: Permitir gestão compartilhada entre membros da família
+- **Conquistas**: Facilitar o alcance de objetivos familiares através de planos estruturados e acompanhamento colaborativo
 
 ---
 
@@ -44,6 +45,7 @@ Sistema completo para gestão financeira familiar, permitindo controle total sob
 - [ ] Limite disponível de cartões
 - [ ] Gráfico de fluxo de caixa mensal
 - [ ] Indicadores principais (KPIs)
+- [ ] Progresso dos planos de conquista ativos - *Sugestão*
 - [ ] Alertas e notificações importantes
 - [ ] Previsão de saldo futuro - *Sugestão*
 - [ ] Comparativo mês anterior - *Sugestão*
@@ -238,7 +240,189 @@ Sistema completo para gestão financeira familiar, permitindo controle total sob
 
 ---
 
-### 📊 FASE 6: Relatórios e Análises
+### 🎯 FASE 6: Planos de Conquistas Familiares
+
+#### 6.1 Criação de Planos de Conquista
+- [ ] CRUD completo de planos de conquista
+- [ ] Tipos de conquista:
+  - [ ] **Aquisição de Bens**: Casa, carro, eletrônicos, móveis, etc.
+  - [ ] **Experiências**: Viagens, eventos, cursos, etc.
+  - [ ] **Objetivos Financeiros**: Reserva de emergência, investimentos, etc.
+  - [ ] **Melhorias**: Reformas, upgrades, etc.
+  - [ ] **Personalizados**: Qualquer objetivo definido pela família
+- [ ] Título e descrição detalhada do plano
+- [ ] Valor total necessário para a conquista
+- [ ] Data prevista para conclusão
+- [ ] Prioridade (Alta, Média, Baixa)
+- [ ] Status do plano (Planejando, Em Andamento, Pausado, Concluído, Cancelado)
+- [ ] Foto/imagem representativa do objetivo
+- [ ] Membros da família participantes
+- [ ] Visibilidade (Público na família, Privado)
+
+#### 6.2 Estrutura de Etapas (Milestones)
+- [ ] Criação de etapas dentro de cada plano
+- [ ] Definição de múltiplas etapas sequenciais ou paralelas
+- [ ] Cada etapa contém:
+  - [ ] Nome/descrição da etapa
+  - [ ] Valor necessário para completar a etapa
+  - [ ] Data prevista de conclusão
+  - [ ] Status (Não Iniciada, Em Progresso, Concluída, Atrasada)
+  - [ ] Percentual de conclusão (0-100%)
+  - [ ] Dependências entre etapas (etapa X deve ser concluída antes de Y)
+  - [ ] Checklist de tarefas dentro da etapa
+- [ ] Visualização em timeline/Gantt chart
+- [ ] Indicadores visuais de progresso por etapa
+- [ ] Reordenação de etapas (drag and drop)
+
+#### 6.3 Mecanismos de Financiamento
+- [ ] **Poupança Dedicada**:
+  - [ ] Criação de "cofrinho virtual" para cada plano
+  - [ ] Depósitos manuais ou automáticos
+  - [ ] Meta de economia mensal
+  - [ ] Histórico de depósitos
+  - [ ] Integração com contas bancárias (transferências automáticas)
+- [ ] **Investimentos Vinculados**:
+  - [ ] Vinculação de investimentos específicos ao plano
+  - [ ] Acompanhamento de rendimentos aplicados ao objetivo
+  - [ ] Cálculo de quanto o investimento contribui para a meta
+  - [ ] Projeção de tempo baseada em rendimentos
+- [ ] **Venda de Bens**:
+  - [ ] Vinculação de bens disponíveis para venda ao plano
+  - [ ] Quando o bem for vendido, valor é creditado automaticamente
+  - [ ] Lista de bens que podem ser vendidos para acelerar o plano
+- [ ] **Economias e Cortes**:
+  - [ ] Registro de economias específicas (ex: "Economizei R$ 200 no supermercado")
+  - [ ] Categorização de cortes de gastos
+  - [ ] Meta de economia mensal por categoria
+  - [ ] Sugestões automáticas de onde economizar
+- [ ] **Rendimentos Extras**:
+  - [ ] Vinculação de receitas extras ao plano
+  - [ ] Trabalhos freelancer, vendas, etc.
+  - [ ] Percentual de receitas que vai para o plano
+- [ ] **Múltiplas Fontes**:
+  - [ ] Combinação de diferentes mecanismos
+  - [ ] Visualização de contribuição de cada fonte
+  - [ ] Gráfico de origem dos recursos
+
+#### 6.4 Acompanhamento e Progresso
+- [ ] Dashboard dedicado aos planos de conquista
+- [ ] Visualização de todos os planos ativos
+- [ ] Indicadores principais:
+  - [ ] Valor total economizado vs. meta
+  - [ ] Percentual de conclusão geral
+  - [ ] Tempo restante estimado
+  - [ ] Velocidade de economia (R$/mês)
+  - [ ] Etapas concluídas vs. total de etapas
+- [ ] Gráfico de evolução do progresso ao longo do tempo
+- [ ] Gráfico de barras mostrando contribuição por fonte
+- [ ] Timeline visual com etapas e marcos
+- [ ] Comparativo: Meta vs. Realizado
+- [ ] Projeção de conclusão baseada na velocidade atual
+- [ ] Alertas quando próximo de atingir a meta
+- [ ] Celebração visual ao completar etapas e planos
+
+#### 6.5 Colaboração Familiar
+- [ ] Atribuição de responsabilidades por membro
+- [ ] Cada membro pode ter uma meta individual de contribuição
+- [ ] Ranking de contribuições (gamificação)
+- [ ] Comentários e mensagens motivacionais no plano
+- [ ] Notificações quando alguém faz uma contribuição
+- [ ] Histórico de contribuições por membro
+- [ ] Gráfico de participação de cada membro
+- [ ] Sistema de "likes" ou reconhecimentos
+- [ ] Chat/comentários dentro de cada plano
+
+#### 6.6 Integrações e Automações
+- [ ] Integração com receitas: percentual automático para planos
+- [ ] Integração com despesas: economia detectada automaticamente
+- [ ] Transferências automáticas para poupança do plano
+- [ ] Alertas quando receita extra é registrada (sugestão de adicionar ao plano)
+- [ ] Sugestões inteligentes de ajustes no plano
+- [ ] Cálculo automático de quanto economizar por mês para atingir meta
+- [ ] Simulação de cenários (e se economizarmos X% a mais?)
+
+#### 6.7 Histórico e Conquistas Realizadas
+- [ ] Arquivo de planos concluídos
+- [ ] Galeria de conquistas realizadas
+- [ ] Estatísticas de planos:
+  - [ ] Total de planos criados
+  - [ ] Total de planos concluídos
+  - [ ] Taxa de sucesso
+  - [ ] Valor total conquistado
+  - [ ] Tempo médio de conclusão
+- [ ] Histórico completo de cada plano (timeline)
+- [ ] Fotos e memórias das conquistas
+- [ ] Certificados digitais de conquista - *Sugestão*
+- [ ] Compartilhamento de conquistas (redes sociais) - *Sugestão*
+
+#### 6.8 Templates e Sugestões
+- [ ] Templates pré-configurados de planos comuns:
+  - [ ] Compra de casa própria
+  - [ ] Compra de veículo
+  - [ ] Viagem de férias
+  - [ ] Reserva de emergência
+  - [ ] Reforma/ampliação
+  - [ ] Educação (curso, faculdade)
+- [ ] Sugestões de etapas baseadas no tipo de plano
+- [ ] Sugestões de valores e prazos realistas
+- [ ] Dicas de economia para cada tipo de objetivo
+- [ ] Comparação com médias de mercado
+
+#### 6.9 Relatórios de Planos
+- [ ] Relatório detalhado de cada plano
+- [ ] Relatório consolidado de todos os planos
+- [ ] Análise de performance (quais planos estão no prazo)
+- [ ] Identificação de planos em risco (atrasados)
+- [ ] Sugestões de ajustes e otimizações
+- [ ] Exportação de relatórios em PDF
+- [ ] Compartilhamento de relatórios com a família
+
+#### 6.10 Gamificação e Motivação
+- [ ] Sistema de badges/conquistas:
+  - [ ] "Primeiro Depósito"
+  - [ ] "Meta Semanal Atingida"
+  - [ ] "50% Concluído"
+  - [ ] "Conquista Realizada"
+  - [ ] "Economista do Mês"
+- [ ] Níveis de progresso (Bronze, Prata, Ouro)
+- [ ] Streaks (sequências de contribuições)
+- [ ] Metas semanais/mensais de economia
+- [ ] Desafios familiares
+- [ ] Mural de motivação com frases e imagens
+- [ ] Contador regressivo para datas importantes
+
+#### 6.11 Notificações e Lembretes
+- [ ] Lembretes de depósitos programados
+- [ ] Notificações de progresso (milestones atingidos)
+- [ ] Alertas de atraso no cronograma
+- [ ] Lembretes de prazos de etapas
+- [ ] Celebrações ao atingir marcos importantes
+- [ ] Sugestões de ajustes quando progresso está lento
+- [ ] Notificações quando alguém da família contribui
+
+#### 6.12 Funcionalidades Avançadas
+- [ ] **Planejamento de Múltiplos Planos Simultâneos**:
+  - [ ] Priorização automática
+  - [ ] Distribuição inteligente de recursos
+  - [ ] Sugestões de qual plano focar primeiro
+- [ ] **Empréstimos para Conquistas**:
+  - [ ] Simulação de financiamento para acelerar
+  - [ ] Cálculo de juros e parcelas
+  - [ ] Comparação: poupar vs. financiar
+- [ ] **Trocas e Negociações**:
+  - [ ] Vinculação de bens para troca que aceleram o plano
+  - [ ] Marketplace interno de trocas familiares
+- [ ] **Crowdfunding Familiar**:
+  - [ ] Convites para familiares externos contribuírem
+  - [ ] Sistema de presentes/doações para planos
+- [ ] **Análise Preditiva**:
+  - [ ] IA para sugerir planos baseados em histórico
+  - [ ] Previsão de viabilidade de planos
+  - [ ] Otimização automática de estratégias de economia
+
+---
+
+### 📊 FASE 7: Relatórios e Análises
 
 #### 6.1 Relatórios Financeiros
 - [ ] Relatório de receitas e despesas
@@ -269,7 +453,7 @@ Sistema completo para gestão financeira familiar, permitindo controle total sob
 
 ---
 
-### 🔔 FASE 7: Notificações e Alertas
+### 🔔 FASE 8: Notificações e Alertas
 
 #### 7.1 Sistema de Notificações
 - [ ] Notificações de vencimentos
@@ -288,7 +472,7 @@ Sistema completo para gestão financeira familiar, permitindo controle total sob
 
 ---
 
-### 🎯 FASE 8: Funcionalidades Avançadas (Sugestões)
+### 🎯 FASE 9: Funcionalidades Avançadas (Sugestões)
 
 #### 8.1 Metas e Objetivos
 - [ ] Definição de metas financeiras
@@ -400,12 +584,14 @@ Sistema completo para gestão financeira familiar, permitindo controle total sob
 - Gestão de financiamentos
 - Relatórios básicos
 
-### Versão 2.0 - Fase 5-6
+### Versão 2.0 - Fase 5-7
 - Gestão completa de patrimônio
+- Planos de Conquistas Familiares (básico)
 - Relatórios avançados
 - Análises e gráficos
 
-### Versão 3.0 - Fase 7-8
+### Versão 3.0 - Fase 8-9
+- Planos de Conquistas Familiares (completo)
 - Notificações completas
 - Funcionalidades avançadas
 - Integrações
@@ -416,8 +602,8 @@ Sistema completo para gestão financeira familiar, permitindo controle total sob
 
 - **MVP**: 2-3 meses
 - **Versão 1.0**: 4-6 meses
-- **Versão 2.0**: 7-9 meses
-- **Versão 3.0**: 10-12 meses
+- **Versão 2.0**: 7-9 meses (inclui Planos de Conquistas básico)
+- **Versão 3.0**: 10-14 meses (inclui Planos de Conquistas completo)
 
 *Estimativas podem variar conforme equipe e recursos disponíveis*
 
