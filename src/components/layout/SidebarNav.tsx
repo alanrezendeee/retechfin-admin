@@ -15,7 +15,7 @@ import { bottomNav, mainNav } from './navConfig'
 import { lp } from '@/theme/tokens'
 
 /** Padding horizontal do conteúdo; à direita um pouco maior para o logo não colar na borda */
-const drawerPaddingX = { pl: 0, pr: 3.5 } as const
+const drawerPaddingX = { pl: 0.5, pr: 3.5 } as const
 
 export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   const { pathname } = useLocation()
