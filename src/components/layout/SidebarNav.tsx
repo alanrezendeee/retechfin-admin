@@ -14,7 +14,8 @@ import { AppLogo } from './AppLogo'
 import { bottomNav, mainNav } from './navConfig'
 import { lp } from '@/theme/tokens'
 
-const DRAWER_PADDING = 2
+/** Padding horizontal do conteúdo; à direita um pouco maior para o logo não colar na borda */
+const drawerPaddingX = { pl: 0, pr: 3.5 } as const
 
 export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   const { pathname } = useLocation()
@@ -67,7 +68,7 @@ export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   }
 
   return (
-    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', px: DRAWER_PADDING, pt: 2.5 }}>
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', ...drawerPaddingX, pt: 2.5 }}>
       <Box
         component={RouterLink}
         to="/dashboard"
@@ -87,7 +88,16 @@ export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
         {mainNav.map(({ path, label, icon: Icon, soon }) => renderItem(path, label, Icon, soon))}
       </List>
 
-      <Divider sx={{ my: 2, borderColor: 'divider' }} />
+      <Divider
+        sx={(theme) => ({
+          my: 2,
+          borderColor: 'divider',
+          /* Linha de ponta a ponta no drawer (compensa o padding do Box pai) */
+          ml: theme.spacing(-drawerPaddingX.pl),
+          mr: theme.spacing(-drawerPaddingX.pr),
+          width: `calc(100% + ${theme.spacing(drawerPaddingX.pl + drawerPaddingX.pr)})`,
+        })}
+      />
 
       <List disablePadding>
         {bottomNav.map(({ path, label, icon: Icon, soon }) => renderItem(path, label, Icon, soon))}

@@ -34,7 +34,7 @@ export function AppLogo({ compact, sx }: Props) {
           boxShadow: `0 0 24px -8px ${alpha(lp.neon, 0.55)}`,
         }}
       >
-        <ShowChartRoundedIcon sx={{ fontSize: compact ? 22 : 24, color: lp.neonBright }} />
+        <ShowChartRoundedIcon sx={{ fontSize: compact ? 22 : 24, color: lp.neon }} />
       </Box>
       {!compact && (
         <Box>
@@ -57,7 +57,7 @@ export function AppLogo({ compact, sx }: Props) {
                 fontWeight: 700,
                 textTransform: 'uppercase',
                 letterSpacing: '0.12em',
-                color: lp.neonBright,
+                color: lp.neon,
               }}
             >
               {BRAND_SUFFIX}
