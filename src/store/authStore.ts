@@ -58,7 +58,7 @@ export const useAuthStore = create<AuthStore>()(
             user,
             isAuthenticated: true,
           })
-        } catch (error) {
+        } catch {
           set({
             user: null,
             token: null,

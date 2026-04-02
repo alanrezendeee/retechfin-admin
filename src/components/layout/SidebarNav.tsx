@@ -1,0 +1,106 @@
+import {
+  Box,
+  Divider,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Tooltip,
+  Typography,
+} from '@mui/material'
+import { Link as RouterLink, useLocation } from 'react-router-dom'
+import { AppLogo } from './AppLogo'
+import { bottomNav, mainNav } from './navConfig'
+import { lp } from '@/theme/tokens'
+
+const DRAWER_PADDING = 2
+
+export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
+  const { pathname } = useLocation()
+
+  const renderItem = (path: string, label: string, Icon: (typeof mainNav)[0]['icon'], soon?: boolean) => {
+    const selected = !soon && pathname === path
+
+    const button = (
+      <ListItemButton
+        {...(!soon ? { component: RouterLink, to: path } : {})}
+        selected={selected}
+        disabled={soon}
+        onClick={soon ? undefined : onNavigate}
+        sx={{
+          py: 1.1,
+          opacity: soon ? 0.55 : 1,
+        }}
+      >
+        <ListItemIcon sx={{ minWidth: 40, color: selected ? 'primary.main' : 'text.secondary' }}>
+          <Icon fontSize="small" />
+        </ListItemIcon>
+        <ListItemText
+          primary={label}
+          primaryTypographyProps={{
+            variant: 'body2',
+            fontWeight: selected ? 700 : 500,
+          }}
+        />
+        {soon && (
+          <Typography variant="caption" color="text.disabled" sx={{ flexShrink: 0 }}>
+            breve
+          </Typography>
+        )}
+      </ListItemButton>
+    )
+
+    const inner = soon ? (
+      <Tooltip title="Módulo em desenvolvimento" placement="right">
+        <span>{button}</span>
+      </Tooltip>
+    ) : (
+      button
+    )
+
+    return (
+      <ListItem key={path} disablePadding sx={{ display: 'block' }}>
+        {inner}
+      </ListItem>
+    )
+  }
+
+  return (
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', px: DRAWER_PADDING, pt: 2.5 }}>
+      <Box
+        component={RouterLink}
+        to="/dashboard"
+        onClick={onNavigate}
+        sx={{ textDecoration: 'none', mb: 3, pl: 0.5, color: 'inherit' }}
+      >
+        <AppLogo />
+      </Box>
+
+      <Typography
+        variant="overline"
+        sx={{ px: 1.5, mb: 1, color: 'text.secondary', letterSpacing: '0.14em', fontSize: '0.65rem' }}
+      >
+        Menu
+      </Typography>
+      <List disablePadding sx={{ flex: 1 }}>
+        {mainNav.map(({ path, label, icon: Icon, soon }) => renderItem(path, label, Icon, soon))}
+      </List>
+
+      <Divider sx={{ my: 2, borderColor: 'divider' }} />
+
+      <List disablePadding>
+        {bottomNav.map(({ path, label, icon: Icon, soon }) => renderItem(path, label, Icon, soon))}
+      </List>
+
+      <Box sx={{ mt: 'auto', py: 2, px: 1 }}>
+        <Typography variant="caption" sx={{ color: 'text.disabled', display: 'block' }}>
+          The Retech
+        </Typography>
+        <Typography variant="caption" sx={{ color: lp.zinc500, fontSize: '0.65rem' }}>
+          Finanças familiares
+        </Typography>
+      </Box>
+    </Box>
+  )
+}

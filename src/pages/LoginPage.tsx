@@ -4,20 +4,26 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import {
+  alpha,
+  Alert,
   Box,
-  Container,
-  Typography,
-  TextField,
   Button,
+  Container,
   IconButton,
   InputAdornment,
   Link,
-  Alert,
+  Paper,
   Stack,
+  TextField,
+  Typography,
 } from '@mui/material'
-import { Visibility, VisibilityOff, Settings } from '@mui/icons-material'
+import Visibility from '@mui/icons-material/Visibility'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import { useAuthStore } from '@/store/authStore'
 import LoginIllustration from '@/components/auth/LoginIllustration'
+import { AppLogo } from '@/components/layout/AppLogo'
+import { ThemeToggle } from '@/components/layout/ThemeToggle'
+import { lp } from '@/theme/tokens'
 
 const loginSchema = z.object({
   email: z.string().email('Email inválido'),
@@ -55,349 +61,245 @@ export default function LoginPage() {
   }
 
   return (
-    <Box sx={{ minHeight: '100vh', display: 'flex' }}>
-      {/* Lado Esquerdo - Dark Premium Gradient */}
+    <Box
+      sx={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
       <Box
         sx={{
-          flex: 1,
-          background: `
-            radial-gradient(circle at 20% 30%, rgba(67, 56, 202, 0.6) 0%, transparent 50%),
-            radial-gradient(circle at 80% 70%, rgba(124, 58, 237, 0.55) 0%, transparent 50%),
-            radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.5) 0%, transparent 60%),
-            linear-gradient(135deg, #4338ca 0%, #7c3aed 40%, #a855f7 100%)
-          `,
-          display: { xs: 'none', md: 'flex' },
-          flexDirection: 'column',
-          justifyContent: 'center',
+          position: 'absolute',
+          inset: 0,
+          pointerEvents: 'none',
+          background: (t) =>
+            t.palette.mode === 'dark'
+              ? `radial-gradient(ellipse 80% 50% at 50% -20%, ${alpha(lp.neon, 0.16)}, transparent),
+                 radial-gradient(circle at 80% 60%, ${alpha(lp.neonDim, 0.08)}, transparent 50%)`
+              : `radial-gradient(ellipse 70% 40% at 50% 0%, ${alpha(lp.neon, 0.12)}, transparent)`,
+        }}
+      />
+
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 16,
+          right: 16,
+          zIndex: 2,
+          display: 'flex',
           alignItems: 'center',
-          padding: 4,
-          position: 'relative',
-          overflow: 'hidden',
-          '&::before': {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            bottom: 0,
-            width: '300px',
-            background: 'linear-gradient(to left, rgba(67, 56, 202, 0.7) 0%, rgba(67, 56, 202, 0.5) 10%, rgba(67, 56, 202, 0.3) 25%, rgba(67, 56, 202, 0.15) 45%, rgba(67, 56, 202, 0.08) 70%, rgba(67, 56, 202, 0.03) 90%, transparent 100%)',
-            zIndex: 1,
-          },
-          '&::after': {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: `
-              radial-gradient(ellipse at 25% 40%, rgba(255, 255, 255, 0.08) 0%, transparent 30%),
-              radial-gradient(ellipse at 75% 60%, rgba(255, 255, 255, 0.04) 0%, transparent 30%),
-              radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.2) 0%, transparent 50%)
-            `,
-            zIndex: 0,
-          },
+          gap: 1,
         }}
       >
-        {/* Efeito de brilho animado suave */}
+        <ThemeToggle />
+      </Box>
+
+      <Box sx={{ display: 'flex', flex: 1, flexDirection: { xs: 'column', md: 'row' } }}>
+        {/* Painel esquerdo — mesmo DNA visual do LP Meu n8n */}
         <Box
           sx={{
-            position: 'absolute',
-            top: '-50%',
-            left: '-50%',
-            width: '200%',
-            height: '200%',
-            background: 'radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%)',
-            animation: 'gentlePulse 10s ease-in-out infinite',
-            '@keyframes gentlePulse': {
-              '0%, 100%': {
-                transform: 'scale(1)',
-                opacity: 0.4,
-              },
-              '50%': {
-                transform: 'scale(1.05)',
-                opacity: 0.6,
-              },
-            },
+            display: { xs: 'none', md: 'flex' },
+            flex: 1,
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            px: 6,
+            py: 8,
+            borderRight: 1,
+            borderColor: 'divider',
+            position: 'relative',
           }}
-        />
-
-        <Box sx={{ position: 'relative', zIndex: 2, textAlign: 'center', color: 'white' }}>
-          {/* Logo com Liquid Glass */}
-          <Box 
-            sx={{ 
-              mb: 4,
-              background: 'rgba(255, 255, 255, 0.08)',
-              backdropFilter: 'blur(20px)',
-              borderRadius: '24px',
-              border: '1px solid rgba(255, 255, 255, 0.18)',
-              padding: '32px 48px',
-              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
-            }}
-          >
-            <Typography
-              variant="h3"
+        >
+          <Box sx={{ maxWidth: 480, textAlign: { md: 'left' } }}>
+            <Box sx={{ mb: 3 }}>
+              <AppLogo />
+            </Box>
+            <Box
               sx={{
-                fontWeight: 700,
-                mb: 1,
-                display: 'flex',
+                display: 'inline-flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                gap: 1.5,
-                textShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
+                gap: 1,
+                px: 1.5,
+                py: 0.5,
+                mb: 2,
+                borderRadius: 10,
+                border: `1px solid ${alpha(lp.neon, 0.25)}`,
+                bgcolor: alpha(lp.neon, 0.06),
               }}
             >
               <Box
-                component="span"
                 sx={{
-                  width: 52,
-                  height: 52,
+                  width: 6,
+                  height: 6,
                   borderRadius: '50%',
-                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.08) 100%)',
-                  backdropFilter: 'blur(15px)',
-                  border: '1.5px solid rgba(255, 255, 255, 0.25)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
+                  bgcolor: lp.neon,
+                  boxShadow: `0 0 8px ${lp.neon}`,
+                  animation: 'pulse 2s ease-in-out infinite',
+                  '@keyframes pulse': {
+                    '0%, 100%': { opacity: 1 },
+                    '50%': { opacity: 0.5 },
+                  },
+                }}
+              />
+              <Typography
+                variant="caption"
+                sx={{
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.12em',
+                  color: lp.neonBright,
                 }}
               >
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M3 13H7L9 3L15 21L17 11H21"
-                    stroke="rgba(255, 255, 255, 0.95)"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    filter="url(#glow)"
-                  />
-                  <defs>
-                    <filter id="glow">
-                      <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
-                      <feMerge>
-                        <feMergeNode in="coloredBlur"/>
-                        <feMergeNode in="SourceGraphic"/>
-                      </feMerge>
-                    </filter>
-                  </defs>
-                </svg>
-              </Box>
-              ReTechFin
-            </Typography>
-            <Typography 
-              variant="h6" 
-              sx={{ 
-                opacity: 0.95, 
-                fontWeight: 400,
-                textShadow: '0 1px 4px rgba(0, 0, 0, 0.15)',
-              }}
-            >
-              Suas finanças, nossa missão
-            </Typography>
-          </Box>
-
-          {/* Ilustração */}
-          <LoginIllustration />
-        </Box>
-      </Box>
-
-      {/* Lado Direito - Formulário com Liquid Glass */}
-      <Box
-        sx={{
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          backgroundColor: '#f8f9fa',
-          padding: { xs: 3, sm: 4 },
-          position: 'relative',
-          '&::before': {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'linear-gradient(to right, rgba(102, 126, 234, 0.03) 0%, transparent 100px)',
-            zIndex: 0,
-          },
-        }}
-      >
-        <Container maxWidth="sm" sx={{ position: 'relative', zIndex: 1 }}>
-          {/* Help Button */}
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 4 }}>
-            <Link
-              href="#"
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 0.5,
-                color: 'text.secondary',
-                textDecoration: 'none',
-                fontSize: '0.875rem',
-                '&:hover': {
-                  color: 'primary.main',
-                },
-              }}
-            >
-              <Settings sx={{ fontSize: 18 }} />
-              Precisa de ajuda?
-            </Link>
-          </Box>
-
-          {/* Card do formulário com Liquid Glass */}
-          <Box
-            sx={{
-              background: 'rgba(255, 255, 255, 0.7)',
-              backdropFilter: 'blur(20px)',
-              borderRadius: '24px',
-              border: '1px solid rgba(255, 255, 255, 0.5)',
-              padding: 4,
-              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
-              mb: 4,
-            }}
-          >
-            <Box sx={{ mb: 4 }}>
-              <Typography variant="h4" sx={{ fontWeight: 700, mb: 1, color: '#1a1a1a' }}>
-                Acesse sua conta
-              </Typography>
-              <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-                Quer saber mais sobre nós?{' '}
-                <Link href="#" sx={{ color: 'primary.main', textDecoration: 'none', fontWeight: 500 }}>
-                  Clique aqui
-                </Link>
+                Gestão familiar · Simples e segura
               </Typography>
             </Box>
-
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <Stack spacing={3}>
-              {error && (
-                <Alert severity="error" onClose={() => setError(null)}>
-                  {error}
-                </Alert>
-              )}
-
-              <TextField
-                {...register('email')}
-                label="Endereço de e-mail"
-                type="email"
-                fullWidth
-                error={!!errors.email}
-                helperText={errors.email?.message}
-                autoComplete="email"
+            <Typography
+              variant="h3"
+              sx={{
+                fontFamily: (t) => t.typography.h3.fontFamily,
+                fontWeight: 800,
+                lineHeight: 1.08,
+                letterSpacing: '-0.02em',
+                mb: 2,
+              }}
+            >
+              Suas finanças em um só{' '}
+              <Box
+                component="span"
                 sx={{
-                  '& .MuiOutlinedInput-root': {
-                    background: 'rgba(255, 255, 255, 0.6)',
-                    backdropFilter: 'blur(10px)',
-                    '&:hover': {
-                      background: 'rgba(255, 255, 255, 0.8)',
-                    },
-                    '&.Mui-focused': {
-                      background: 'rgba(255, 255, 255, 0.9)',
-                    },
-                  },
-                }}
-              />
-
-              <TextField
-                {...register('password')}
-                label="Senha"
-                type={showPassword ? 'text' : 'password'}
-                fullWidth
-                error={!!errors.password}
-                helperText={errors.password?.message}
-                autoComplete="current-password"
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    background: 'rgba(255, 255, 255, 0.6)',
-                    backdropFilter: 'blur(10px)',
-                    '&:hover': {
-                      background: 'rgba(255, 255, 255, 0.8)',
-                    },
-                    '&.Mui-focused': {
-                      background: 'rgba(255, 255, 255, 0.9)',
-                    },
-                  },
-                }}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() => setShowPassword(!showPassword)}
-                        edge="end"
-                        aria-label="toggle password visibility"
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <Link
-                  href="#"
-                  sx={{
-                    color: 'primary.main',
-                    textDecoration: 'none',
-                    fontSize: '0.875rem',
-                    '&:hover': {
-                      textDecoration: 'underline',
-                    },
-                  }}
-                >
-                  Esqueceu a senha?
-                </Link>
-              </Box>
-
-              <Button
-                type="submit"
-                variant="contained"
-                fullWidth
-                size="large"
-                disabled={isLoading}
-                sx={{
-                  background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.85) 50%, rgba(240, 147, 251, 0.9) 100%)',
-                  backdropFilter: 'blur(10px)',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  py: 1.5,
-                  boxShadow: '0 4px 16px rgba(102, 126, 234, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
-                  '&:hover': {
-                    background: 'linear-gradient(135deg, rgba(102, 126, 234, 1) 0%, rgba(118, 75, 162, 0.95) 50%, rgba(240, 147, 251, 1) 100%)',
-                    boxShadow: '0 6px 20px rgba(102, 126, 234, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
-                  },
+                  background: `linear-gradient(90deg, ${lp.neonBright} 0%, ${lp.neon} 50%, #6ee7b7 100%)`,
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
                 }}
               >
-                {isLoading ? 'Entrando...' : 'Entrar'}
-              </Button>
-            </Stack>
-          </form>
+                lugar
+              </Box>
+            </Typography>
+            <Typography variant="body1" color="text.secondary" sx={{ mb: 4, maxWidth: 420 }}>
+              Controle receitas, despesas e metas com a mesma experiência visual da família de produtos
+              The Retech.
+            </Typography>
+            <LoginIllustration />
           </Box>
+        </Box>
 
-          {/* Informações de Demo com Liquid Glass */}
-          <Box 
-            sx={{ 
-              mt: 4, 
-              p: 2.5, 
-              background: 'rgba(255, 255, 255, 0.5)',
-              backdropFilter: 'blur(15px)',
-              borderRadius: '16px',
-              border: '1px solid rgba(255, 255, 255, 0.4)',
-              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.5)',
-            }}
-          >
-            <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 1, fontWeight: 600 }}>
-              <strong>Credenciais de demonstração:</strong>
-            </Typography>
-            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-              Email: demo@retechfin.com
-              <br />
-              Senha: demo123
-            </Typography>
-          </Box>
-        </Container>
+        {/* Formulário */}
+        <Box
+          sx={{
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            px: 2,
+            py: { xs: 8, md: 6 },
+          }}
+        >
+          <Container maxWidth="sm">
+            <Box sx={{ display: { xs: 'flex', md: 'none' }, justifyContent: 'center', mb: 4 }}>
+              <AppLogo />
+            </Box>
+
+            <Paper
+              elevation={0}
+              sx={{
+                p: { xs: 3, sm: 4 },
+                borderRadius: 3,
+                border: 1,
+                borderColor: 'divider',
+                bgcolor: (t) => alpha(t.palette.background.paper, t.palette.mode === 'dark' ? 0.85 : 0.98),
+                backdropFilter: 'blur(20px)',
+              }}
+            >
+              <Typography variant="h4" sx={{ fontWeight: 800, mb: 0.5 }}>
+                Acesse sua conta
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                ReTechFin Admin — gestão financeira familiar
+              </Typography>
+
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <Stack spacing={2.5}>
+                  {error && (
+                    <Alert severity="error" onClose={() => setError(null)}>
+                      {error}
+                    </Alert>
+                  )}
+
+                  <TextField
+                    {...register('email')}
+                    label="E-mail"
+                    type="email"
+                    fullWidth
+                    error={!!errors.email}
+                    helperText={errors.email?.message}
+                    autoComplete="email"
+                  />
+
+                  <TextField
+                    {...register('password')}
+                    label="Senha"
+                    type={showPassword ? 'text' : 'password'}
+                    fullWidth
+                    error={!!errors.password}
+                    helperText={errors.password?.message}
+                    autoComplete="current-password"
+                    slotProps={{
+                      input: {
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() => setShowPassword(!showPassword)}
+                              edge="end"
+                              aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                            >
+                              {showPassword ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      },
+                    }}
+                  />
+
+                  <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <Link href="#" variant="body2" underline="hover" color="primary">
+                      Esqueceu a senha?
+                    </Link>
+                  </Box>
+
+                  <Button type="submit" variant="contained" color="primary" size="large" fullWidth disabled={isLoading}>
+                    {isLoading ? 'Entrando...' : 'Entrar'}
+                  </Button>
+                </Stack>
+              </form>
+            </Paper>
+
+            <Paper
+              elevation={0}
+              sx={{
+                mt: 3,
+                p: 2,
+                borderRadius: 2,
+                border: 1,
+                borderColor: 'divider',
+                bgcolor: (t) => alpha(t.palette.background.paper, 0.5),
+              }}
+            >
+              <Typography variant="caption" color="text.secondary" display="block" fontWeight={600} gutterBottom>
+                Credenciais de demonstração
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                E-mail: demo@retechfin.com
+                <br />
+                Senha: demo123
+              </Typography>
+            </Paper>
+          </Container>
+        </Box>
       </Box>
     </Box>
   )
 }
-
