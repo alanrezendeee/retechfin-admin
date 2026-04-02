@@ -1,6 +1,9 @@
 import { createTheme, alpha } from '@mui/material/styles'
 import type { PaletteMode } from '@mui/material'
-import { fonts, glow, lp } from './tokens'
+import { colorTemplate } from './colorTemplate'
+import { fonts, glow } from './tokens'
+
+const C = colorTemplate
 
 declare module '@mui/material/styles' {
   interface Palette {
@@ -24,38 +27,38 @@ function paletteForMode(mode: PaletteMode) {
   return {
     mode,
     primary: {
-      main: lp.neon,
-      light: lp.neonBright,
-      dark: lp.neonDim,
-      contrastText: lp.black,
+      main: C.primary.main,
+      light: C.primary.light,
+      dark: C.primary.dark,
+      contrastText: C.primary.contrastText,
     },
     secondary: {
-      main: lp.neonDim,
-      light: lp.neonBright,
-      dark: '#009624',
-      contrastText: lp.black,
+      main: C.primary.dark,
+      light: C.primary.light,
+      dark: C.secondary.dark,
+      contrastText: C.primary.contrastText,
     },
     neon: {
-      main: lp.neon,
-      bright: lp.neonBright,
-      dim: lp.neonDim,
+      main: C.primary.main,
+      bright: C.primary.light,
+      dim: C.primary.dark,
     },
     background: {
-      default: isDark ? lp.surface : '#f4f4f5',
-      paper: isDark ? lp.elevated : '#ffffff',
+      default: isDark ? C.surface.app : C.light.background,
+      paper: isDark ? C.surface.elevated : C.light.paper,
     },
     text: {
-      primary: isDark ? lp.zinc100 : '#09090b',
-      secondary: isDark ? lp.zinc400 : lp.zinc600,
-      disabled: isDark ? alpha(lp.zinc500, 0.5) : alpha(lp.zinc600, 0.5),
+      primary: isDark ? C.neutral.zinc100 : C.light.textPrimary,
+      secondary: isDark ? C.neutral.zinc400 : C.neutral.zinc600,
+      disabled: isDark ? alpha(C.neutral.zinc500, 0.5) : alpha(C.neutral.zinc600, 0.5),
     },
-    divider: isDark ? lp.border : 'rgba(9, 9, 11, 0.08)',
+    divider: isDark ? C.border.subtle : C.border.onLight,
     action: {
-      active: isDark ? lp.zinc300 : lp.zinc600,
-      hover: isDark ? alpha('#ffffff', 0.05) : alpha(lp.black, 0.04),
-      selected: isDark ? alpha(lp.neon, 0.12) : alpha(lp.neon, 0.16),
-      disabled: isDark ? alpha('#fff', 0.2) : alpha(lp.black, 0.26),
-      disabledBackground: isDark ? alpha('#fff', 0.08) : alpha(lp.black, 0.08),
+      active: isDark ? C.neutral.zinc300 : C.neutral.zinc600,
+      hover: isDark ? alpha(C.common.white, 0.05) : alpha(C.common.black, 0.04),
+      selected: isDark ? alpha(C.primary.main, 0.12) : alpha(C.primary.main, 0.16),
+      disabled: isDark ? alpha(C.common.white, 0.2) : alpha(C.common.black, 0.26),
+      disabledBackground: isDark ? alpha(C.common.white, 0.08) : alpha(C.common.black, 0.08),
     },
   }
 }
@@ -85,16 +88,16 @@ export function createAppTheme(mode: PaletteMode) {
       MuiCssBaseline: {
         styleOverrides: {
           body: {
-            backgroundColor: isDark ? lp.surface : '#f4f4f5',
+            backgroundColor: isDark ? C.surface.app : C.light.background,
             backgroundImage: isDark
-              ? `radial-gradient(ellipse 80% 50% at 50% -20%, ${alpha(lp.neon, 0.12)}, transparent),
-                 radial-gradient(circle at 80% 60%, ${alpha(lp.neonDim, 0.06)}, transparent 50%)`
+              ? `radial-gradient(ellipse 80% 50% at 50% -20%, ${alpha(C.primary.main, 0.12)}, transparent),
+                 radial-gradient(circle at 80% 60%, ${alpha(C.primary.dark, 0.06)}, transparent 50%)`
               : 'none',
             backgroundAttachment: 'fixed',
           },
           '::selection': {
-            backgroundColor: alpha(lp.neon, 0.3),
-            color: '#fff',
+            backgroundColor: alpha(C.primary.main, C.selection.backgroundAlpha),
+            color: C.selection.foreground,
           },
         },
       },
@@ -102,20 +105,20 @@ export function createAppTheme(mode: PaletteMode) {
         styleOverrides: {
           root: { borderRadius: 12, fontWeight: 700 },
           containedPrimary: {
-            color: lp.black,
-            background: `linear-gradient(90deg, ${lp.neonDim} 0%, ${lp.neon} 100%)`,
+            color: C.primary.contrastText,
+            background: `linear-gradient(90deg, ${C.primary.dark} 0%, ${C.primary.main} 100%)`,
             boxShadow: glow.btn,
             '&:hover': {
-              background: `linear-gradient(90deg, ${lp.neonDim} 0%, ${lp.neon} 100%)`,
+              background: `linear-gradient(90deg, ${C.primary.dark} 0%, ${C.primary.main} 100%)`,
               filter: 'brightness(1.08)',
               boxShadow: glow.btn,
             },
           },
           outlined: {
-            borderColor: isDark ? lp.borderStrong : 'rgba(9,9,11,0.12)',
+            borderColor: isDark ? C.border.strong : C.border.onLight12,
             '&:hover': {
-              borderColor: alpha(lp.neon, 0.4),
-              backgroundColor: isDark ? alpha('#fff', 0.04) : alpha(lp.neon, 0.06),
+              borderColor: alpha(C.primary.main, 0.4),
+              backgroundColor: isDark ? alpha(C.common.white, 0.04) : alpha(C.primary.main, 0.06),
             },
           },
         },
@@ -125,7 +128,7 @@ export function createAppTheme(mode: PaletteMode) {
           root: {
             backgroundImage: 'none',
             ...(isDark && {
-              border: `1px solid ${lp.border}`,
+              border: `1px solid ${C.border.subtle}`,
             }),
           },
         },
@@ -133,9 +136,9 @@ export function createAppTheme(mode: PaletteMode) {
       MuiAppBar: {
         styleOverrides: {
           root: {
-            backgroundColor: isDark ? alpha(lp.surface, 0.72) : alpha('#fff', 0.72),
+            backgroundColor: isDark ? alpha(C.surface.app, 0.72) : alpha(C.light.paper, 0.72),
             backdropFilter: 'blur(20px)',
-            borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(9,9,11,0.06)'}`,
+            borderBottom: `1px solid ${isDark ? C.chrome.appBarBorderDark : C.chrome.appBarBorderLight}`,
             boxShadow: 'none',
           },
         },
@@ -143,8 +146,8 @@ export function createAppTheme(mode: PaletteMode) {
       MuiDrawer: {
         styleOverrides: {
           paper: {
-            backgroundColor: isDark ? lp.surface : '#fafafa',
-            borderRight: `1px solid ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(9,9,11,0.06)'}`,
+            backgroundColor: isDark ? C.surface.app : C.surface.drawerLight,
+            borderRight: `1px solid ${isDark ? C.chrome.drawerBorderDark : C.chrome.drawerBorderLight}`,
             backgroundImage: 'none',
           },
         },
@@ -155,11 +158,11 @@ export function createAppTheme(mode: PaletteMode) {
             borderRadius: 10,
             marginBottom: 4,
             '&.Mui-selected': {
-              backgroundColor: alpha(lp.neon, isDark ? 0.12 : 0.14),
-              border: `1px solid ${alpha(lp.neon, 0.35)}`,
+              backgroundColor: alpha(C.primary.main, isDark ? 0.12 : 0.14),
+              border: `1px solid ${alpha(C.primary.main, 0.35)}`,
               boxShadow: isDark ? glow.ring : 'none',
               '&:hover': {
-                backgroundColor: alpha(lp.neon, isDark ? 0.16 : 0.18),
+                backgroundColor: alpha(C.primary.main, isDark ? 0.16 : 0.18),
               },
             },
           },
@@ -171,7 +174,7 @@ export function createAppTheme(mode: PaletteMode) {
           root: {
             '& .MuiOutlinedInput-root': {
               borderRadius: 12,
-              backgroundColor: isDark ? alpha('#000', 0.35) : alpha(lp.black, 0.02),
+              backgroundColor: isDark ? alpha(C.common.black, 0.35) : alpha(C.common.black, 0.02),
             },
           },
         },
@@ -179,15 +182,15 @@ export function createAppTheme(mode: PaletteMode) {
       MuiOutlinedInput: {
         styleOverrides: {
           notchedOutline: {
-            borderColor: isDark ? lp.borderStrong : 'rgba(9,9,11,0.12)',
+            borderColor: isDark ? C.border.strong : C.border.onLight12,
           },
         },
       },
       MuiTooltip: {
         styleOverrides: {
           tooltip: {
-            backgroundColor: isDark ? lp.elevated : lp.zinc900,
-            border: `1px solid ${lp.border}`,
+            backgroundColor: isDark ? C.surface.elevated : C.neutral.zinc900,
+            border: `1px solid ${C.border.subtle}`,
             fontSize: 12,
           },
         },

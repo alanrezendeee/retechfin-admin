@@ -1,4 +1,5 @@
 import { alpha, Box, useTheme } from '@mui/material'
+import { colorTemplate } from '@/theme/colorTemplate'
 import { glow, lp } from '@/theme/tokens'
 
 /**
@@ -42,7 +43,7 @@ export default function LoginIllustration() {
           width: 180,
           height: 180,
           borderRadius: '50%',
-          bgcolor: alpha('#10b981', 0.1),
+          bgcolor: alpha(colorTemplate.illustration.accent, colorTemplate.illustration.accentAlpha),
           filter: 'blur(40px)',
         }}
       />

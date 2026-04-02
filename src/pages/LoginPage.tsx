@@ -23,6 +23,7 @@ import { useAuthStore } from '@/store/authStore'
 import LoginIllustration from '@/components/auth/LoginIllustration'
 import { AppLogo } from '@/components/layout/AppLogo'
 import { ThemeToggle } from '@/components/layout/ThemeToggle'
+import { colorTemplate } from '@/theme/colorTemplate'
 import { lp } from '@/theme/tokens'
 
 const loginSchema = z.object({
@@ -170,7 +171,7 @@ export default function LoginPage() {
               <Box
                 component="span"
                 sx={{
-                  background: `linear-gradient(90deg, ${lp.neonBright} 0%, ${lp.neon} 50%, #6ee7b7 100%)`,
+                  background: `linear-gradient(90deg, ${lp.neonBright} 0%, ${lp.neon} 50%, ${colorTemplate.primary.gradientEnd} 100%)`,
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   backgroundClip: 'text',

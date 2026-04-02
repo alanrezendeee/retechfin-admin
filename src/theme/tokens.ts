@@ -1,29 +1,32 @@
 /**
- * Alinhado ao design system do LP Meu n8n (retechmeun8n-lp / meun8n.theretech.com.br).
+ * Tokens derivados de `colorTemplate.ts` — compatível com imports existentes (`lp`, `glow`).
+ * Para mudar cores, edite apenas `src/theme/colorTemplate.ts`.
  */
+import { buildGlowFromPrimary, colorTemplate } from './colorTemplate'
+
 export const fonts = {
   body: '"DM Sans", ui-sans-serif, system-ui, sans-serif',
   display: '"Syne", ui-sans-serif, system-ui, sans-serif',
 } as const
 
+const { primary, surface, border, neutral, common } = colorTemplate
+
+/** @deprecated Prefira `colorTemplate` em código novo; mantido para compatibilidade. */
 export const lp = {
-  surface: '#050506',
-  elevated: '#0c0e12',
-  border: 'rgba(255, 255, 255, 0.08)',
-  borderStrong: 'rgba(255, 255, 255, 0.1)',
-  neon: '#00e676',
-  neonBright: '#69f0ae',
-  neonDim: '#00c853',
-  zinc100: '#f4f4f5',
-  zinc300: '#d4d4d8',
-  zinc400: '#a1a1aa',
-  zinc500: '#71717a',
-  zinc600: '#52525b',
-  zinc900: '#18181b',
-  black: '#000000',
+  surface: surface.app,
+  elevated: surface.elevated,
+  border: border.subtle,
+  borderStrong: border.strong,
+  neon: primary.main,
+  neonBright: primary.light,
+  neonDim: primary.dark,
+  zinc100: neutral.zinc100,
+  zinc300: neutral.zinc300,
+  zinc400: neutral.zinc400,
+  zinc500: neutral.zinc500,
+  zinc600: neutral.zinc600,
+  zinc900: neutral.zinc900,
+  black: common.black,
 } as const
 
-export const glow = {
-  ring: `0 0 0 1px rgba(0, 230, 118, 0.25), 0 0 60px -12px rgba(0, 230, 118, 0.45)`,
-  btn: `0 0 40px -8px rgba(0, 230, 118, 0.65), 0 8px 32px -12px rgba(0, 0, 0, 0.9)`,
-} as const
+export const glow = buildGlowFromPrimary(colorTemplate.primary.main)
