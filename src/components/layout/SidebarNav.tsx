@@ -11,6 +11,7 @@ import {
 } from '@mui/material'
 import { Link as RouterLink, useLocation } from 'react-router-dom'
 import { AppLogo } from './AppLogo'
+import { SidebarUserCard } from './SidebarUserCard'
 import { bottomNav, mainNav } from './navConfig'
 import { lp } from '@/theme/tokens'
 
@@ -68,15 +69,18 @@ export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   }
 
   return (
-    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', ...drawerPaddingX, pt: 2.5 }}>
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', ...drawerPaddingX, pt: 2.5, pl: 3.5 }}>
+      {/* Logo acima do card do usuário */}
       <Box
         component={RouterLink}
         to="/dashboard"
         onClick={onNavigate}
-        sx={{ textDecoration: 'none', mb: 3, pl: 0.5, color: 'inherit' }}
+        sx={{ textDecoration: 'none', color: 'inherit', mb: 1 }}
       >
         <AppLogo />
       </Box>
+
+      <SidebarUserCard />
 
       <Typography
         variant="overline"

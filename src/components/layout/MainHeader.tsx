@@ -50,6 +50,7 @@ export function MainHeader({ title = 'Painel' }: Props) {
           </IconButton>
         )}
 
+        {/* Logo no mobile (compacta) */}
         <Box sx={{ display: { xs: 'flex', lg: 'none' }, alignItems: 'center' }}>
           <AppLogo compact />
         </Box>
@@ -88,7 +89,8 @@ export function MainHeader({ title = 'Painel' }: Props) {
           }}
         />
 
-        <Box sx={{ flexGrow: 1, display: { xs: 'block', sm: 'none' } }} />
+        {/* Empurra ThemeToggle + UserMenu para a direita */}
+        <Box sx={{ flexGrow: 1 }} />
 
         <ThemeToggle />
         <UserMenu />

@@ -5,8 +5,10 @@ import { RequireAuth } from './components/auth/RequireAuth'
 import { DashboardLayout } from './layouts/DashboardLayout'
 import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
+import { useDynamicFavicon } from './hooks/useDynamicFavicon'
 
 function App() {
+  useDynamicFavicon()
   const { isAuthenticated, validateSession } = useAuthStore()
 
   useEffect(() => {

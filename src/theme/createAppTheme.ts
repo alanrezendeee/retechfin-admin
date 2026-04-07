@@ -138,8 +138,9 @@ export function createAppTheme(mode: PaletteMode) {
           root: {
             backgroundColor: isDark ? alpha(C.surface.app, 0.72) : alpha(C.light.paper, 0.72),
             backdropFilter: 'blur(20px)',
-            borderBottom: `1px solid ${isDark ? C.chrome.appBarBorderDark : C.chrome.appBarBorderLight}`,
             boxShadow: 'none',
+            /* Anula o border geral do MuiPaper para o AppBar não ter traço em nenhum lado */
+            border: 'none',
           },
         },
       },

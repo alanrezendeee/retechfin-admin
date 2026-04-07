@@ -8,6 +8,7 @@ const MOCK_USERS: User[] = [
     email: 'demo@retechfin.com',
     role: 'admin',
     familyId: 'family-1',
+    familyName: 'Família Silva',
     avatar: undefined,
   },
   {
@@ -16,6 +17,7 @@ const MOCK_USERS: User[] = [
     email: 'maria@retechfin.com',
     role: 'member',
     familyId: 'family-1',
+    familyName: 'Família Silva',
     avatar: undefined,
   },
 ]

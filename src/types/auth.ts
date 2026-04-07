@@ -5,6 +5,7 @@ export interface User {
   avatar?: string
   role: 'admin' | 'member'
   familyId: string
+  familyName?: string
 }
 
 export interface LoginCredentials {

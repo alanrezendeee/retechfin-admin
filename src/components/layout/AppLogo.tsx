@@ -43,7 +43,7 @@ export function AppLogo({ compact, sx }: Props) {
             sx={{
               fontFamily: (t) => t.typography.h6.fontFamily,
               fontWeight: 800,
-              fontSize: '1.125rem',
+              fontSize: '0.9srem',
               letterSpacing: '-0.02em',
               color: 'text.primary',
             }}
@@ -57,7 +57,7 @@ export function AppLogo({ compact, sx }: Props) {
                 fontWeight: 700,
                 textTransform: 'uppercase',
                 letterSpacing: '0.12em',
-                color: lp.neon,
+                color: lp.neonBright,
               }}
             >
               {BRAND_SUFFIX}
