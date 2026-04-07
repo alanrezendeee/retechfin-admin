@@ -13,7 +13,7 @@ import {
 import TrendingUpRoundedIcon from '@mui/icons-material/TrendingUpRounded'
 import PaymentsRoundedIcon from '@mui/icons-material/PaymentsRounded'
 import SavingsRoundedIcon from '@mui/icons-material/SavingsRounded'
-import { useAuthStore } from '@/store/authStore'
+import { useAuth } from '@/auth/context/jwt/auth-provider'
 import { lp } from '@/theme/tokens'
 
 function SummaryCard({
@@ -78,7 +78,7 @@ function SummaryCard({
 }
 
 export default function DashboardPage() {
-  const { user } = useAuthStore()
+  const { user } = useAuth()
 
   return (
     <Box>

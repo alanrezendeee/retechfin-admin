@@ -12,12 +12,12 @@ import {
 } from '@mui/material'
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded'
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded'
-import { useAuthStore } from '@/store/authStore'
+import { useAuth } from '@/auth/context/jwt/auth-provider'
 import { lp } from '@/theme/tokens'
 
 export function UserMenu() {
   const [anchor, setAnchor] = useState<null | HTMLElement>(null)
-  const { user, logout } = useAuthStore()
+  const { user, logout } = useAuth()
   const navigate = useNavigate()
   const open = Boolean(anchor)
 

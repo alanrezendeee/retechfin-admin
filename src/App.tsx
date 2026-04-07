@@ -1,19 +1,23 @@
-import { useEffect } from 'react'
+import { Box, CircularProgress } from '@mui/material'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { useAuthStore } from './store/authStore'
-import { RequireAuth } from './components/auth/RequireAuth'
-import { DashboardLayout } from './layouts/DashboardLayout'
-import LoginPage from './pages/LoginPage'
-import DashboardPage from './pages/DashboardPage'
-import { useDynamicFavicon } from './hooks/useDynamicFavicon'
+import { useAuth } from '@/auth/context/jwt/auth-provider'
+import { RequireAuth } from '@/components/auth/RequireAuth'
+import LoginPage from '@/pages/LoginPage'
+import { useDynamicFavicon } from '@/hooks/useDynamicFavicon'
+import { DashboardLayout } from '@/layouts/DashboardLayout'
+import { DashboardIndexRoute } from '@/routes/sections/dashboard'
 
 function App() {
   useDynamicFavicon()
-  const { isAuthenticated, validateSession } = useAuthStore()
+  const { isAuthenticated, isInitialized } = useAuth()
 
-  useEffect(() => {
-    validateSession()
-  }, [validateSession])
+  if (!isInitialized) {
+    return (
+      <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <CircularProgress />
+      </Box>
+    )
+  }
 
   return (
     <Routes>
@@ -23,8 +27,8 @@ function App() {
       />
 
       <Route element={<RequireAuth />}>
-        <Route path="/dashboard" element={<DashboardLayout />}>
-          <Route index element={<DashboardPage />} />
+        <Route path="dashboard" element={<DashboardLayout />}>
+          <Route index element={<DashboardIndexRoute />} />
         </Route>
       </Route>
 

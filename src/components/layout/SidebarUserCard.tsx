@@ -1,5 +1,5 @@
 import { alpha, Avatar, Box, Divider, Typography } from '@mui/material'
-import { useAuthStore } from '@/store/authStore'
+import { useAuth } from '@/auth/context/jwt/auth-provider'
 import { colorTemplate } from '@/theme/colorTemplate'
 
 const C = colorTemplate
@@ -72,7 +72,7 @@ function NeonLandscapeSvg() {
 }
 
 export function SidebarUserCard() {
-  const { user } = useAuthStore()
+  const { user } = useAuth()
   const initial = user?.name?.charAt(0)?.toUpperCase() ?? '?'
   const color = C.primary.main
 
@@ -138,7 +138,7 @@ export function SidebarUserCard() {
               noWrap
               sx={{ color: color, opacity: 0.85, display: 'block', lineHeight: 1.3 }}
             >
-              {user?.familyName ?? 'Família'}
+              {user?.familyName ?? user?.email ?? 'Conta'}
             </Typography>
           </Box>
         </Box>

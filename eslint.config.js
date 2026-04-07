@@ -18,4 +18,11 @@ export default tseslint.config(
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     },
   },
+  {
+    files: ['src/auth/**/*.{ts,tsx}'],
+    rules: {
+      // Context + hooks + guards exportam mais que componentes; padrão típico de auth/CASL.
+      'react-refresh/only-export-components': 'off',
+    },
+  },
 )

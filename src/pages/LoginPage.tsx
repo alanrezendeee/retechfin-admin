@@ -19,7 +19,7 @@ import {
 } from '@mui/material'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
-import { useAuthStore } from '@/store/authStore'
+import { useAuth } from '@/auth/context/jwt/auth-provider'
 import LoginIllustration from '@/components/auth/LoginIllustration'
 import { AppLogo } from '@/components/layout/AppLogo'
 import { ThemeToggle } from '@/components/layout/ThemeToggle'
@@ -35,7 +35,7 @@ type LoginFormData = z.infer<typeof loginSchema>
 
 export default function LoginPage() {
   const navigate = useNavigate()
-  const { login, isLoading } = useAuthStore()
+  const { login, checkUserSession, isLoading } = useAuth()
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -55,6 +55,7 @@ export default function LoginPage() {
     try {
       setError(null)
       await login(data)
+      await checkUserSession()
       navigate('/dashboard')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro ao fazer login')

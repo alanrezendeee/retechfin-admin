@@ -1,8 +1,8 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
-import { useAuthStore } from '@/store/authStore'
+import { useAuth } from '@/auth/context/jwt/auth-provider'
 
 export function RequireAuth() {
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+  const { isAuthenticated } = useAuth()
   const location = useLocation()
 
   if (!isAuthenticated) {

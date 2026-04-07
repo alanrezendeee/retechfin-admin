@@ -12,16 +12,19 @@ import {
 import { Link as RouterLink, useLocation } from 'react-router-dom'
 import { AppLogo } from './AppLogo'
 import { SidebarUserCard } from './SidebarUserCard'
-import { bottomNav, mainNav } from './navConfig'
 import { lp } from '@/theme/tokens'
+import { retechfinNavSections } from '@/layouts/nav-config-retechfin'
+import { useFilteredNavData, type NavDataItem } from '@/layouts/components/nav-filter-by-casl'
 
 /** Padding horizontal do conteúdo; à direita um pouco maior para o logo não colar na borda */
 const drawerPaddingX = { pl: 0.5, pr: 3.5 } as const
 
 export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   const { pathname } = useLocation()
+  const sections = useFilteredNavData(retechfinNavSections)
 
-  const renderItem = (path: string, label: string, Icon: (typeof mainNav)[0]['icon'], soon?: boolean) => {
+  const renderItem = (item: NavDataItem) => {
+    const { path, label, icon: Icon, soon } = item
     const selected = !soon && pathname === path
 
     const button = (
@@ -70,7 +73,6 @@ export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
 
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', ...drawerPaddingX, pt: 2.5, pl: 3.5 }}>
-      {/* Logo acima do card do usuário */}
       <Box
         component={RouterLink}
         to="/dashboard"
@@ -82,30 +84,32 @@ export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
 
       <SidebarUserCard />
 
-      <Typography
-        variant="overline"
-        sx={{ px: 1.5, mb: 1, color: 'text.secondary', letterSpacing: '0.14em', fontSize: '0.65rem' }}
-      >
-        Menu
-      </Typography>
-      <List disablePadding sx={{ flex: 1 }}>
-        {mainNav.map(({ path, label, icon: Icon, soon }) => renderItem(path, label, Icon, soon))}
-      </List>
-
-      <Divider
-        sx={(theme) => ({
-          my: 2,
-          borderColor: 'divider',
-          /* Linha de ponta a ponta no drawer (compensa o padding do Box pai) */
-          ml: theme.spacing(-drawerPaddingX.pl),
-          mr: theme.spacing(-drawerPaddingX.pr),
-          width: `calc(100% + ${theme.spacing(drawerPaddingX.pl + drawerPaddingX.pr)})`,
-        })}
-      />
-
-      <List disablePadding>
-        {bottomNav.map(({ path, label, icon: Icon, soon }) => renderItem(path, label, Icon, soon))}
-      </List>
+      <Box sx={{ flex: 1, overflow: 'auto', minHeight: 0 }}>
+        {sections.map((section, i) => (
+          <Box key={section.subheader ?? `section-${i}`}>
+            {section.subheader && (
+              <Typography
+                variant="overline"
+                sx={{ px: 1.5, mb: 1, color: 'text.secondary', letterSpacing: '0.14em', fontSize: '0.65rem' }}
+              >
+                {section.subheader}
+              </Typography>
+            )}
+            <List disablePadding>{section.items.map((item) => renderItem(item))}</List>
+            {i < sections.length - 1 && (
+              <Divider
+                sx={(theme) => ({
+                  my: 2,
+                  borderColor: 'divider',
+                  ml: theme.spacing(-drawerPaddingX.pl),
+                  mr: theme.spacing(-drawerPaddingX.pr),
+                  width: `calc(100% + ${theme.spacing(drawerPaddingX.pl + drawerPaddingX.pr)})`,
+                })}
+              />
+            )}
+          </Box>
+        ))}
+      </Box>
 
       <Box sx={{ mt: 'auto', py: 2, px: 1 }}>
         <Typography variant="caption" sx={{ color: 'text.disabled', display: 'block' }}>

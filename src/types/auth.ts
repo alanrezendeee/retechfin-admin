@@ -3,8 +3,9 @@ export interface User {
   name: string
   email: string
   avatar?: string
-  role: 'admin' | 'member'
-  familyId: string
+  /** Campos legados / futuros domínio RetechFin (não vêm do retechauth-api hoje). */
+  role?: 'admin' | 'member'
+  familyId?: string
   familyName?: string
 }
 
@@ -13,6 +14,7 @@ export interface LoginCredentials {
   password: string
 }
 
+/** Resposta de login já normalizada para o app (tokens + usuário). */
 export interface LoginResponse {
   user: User
   token: string
@@ -25,4 +27,3 @@ export interface AuthState {
   isAuthenticated: boolean
   isLoading: boolean
 }
-

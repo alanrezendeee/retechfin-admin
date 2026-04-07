@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { CssBaseline } from '@mui/material'
 import App from './App'
 import { AppThemeProvider } from './providers/AppThemeProvider'
+import { AuthProvider } from '@/auth/context/jwt/auth-provider'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -18,12 +19,14 @@ const queryClient = new QueryClient({
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <AppThemeProvider>
-        <CssBaseline />
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </AppThemeProvider>
+      <AuthProvider>
+        <AppThemeProvider>
+          <CssBaseline />
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </AppThemeProvider>
+      </AuthProvider>
     </QueryClientProvider>
   </React.StrictMode>,
 )
