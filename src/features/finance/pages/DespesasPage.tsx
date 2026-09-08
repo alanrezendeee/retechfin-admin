@@ -815,7 +815,13 @@ function EntryFormDialog({
   const submit = handleSubmit((values) => mutation.mutate(values))
 
   return (
-    <Dialog open={open} onClose={mutation.isPending ? undefined : onClose} maxWidth="sm" fullWidth>
+    <Dialog
+      open={open}
+      onClose={mutation.isPending ? undefined : onClose}
+      // Editor de parcelas aberto: a tabela precisa de largura pra respirar.
+      maxWidth={editorOpen && installments ? 'md' : 'sm'}
+      fullWidth
+    >
       <DialogTitle sx={{ fontWeight: 800 }}>
         {isEdit ? 'Editar despesa' : 'Nova despesa'}
       </DialogTitle>
