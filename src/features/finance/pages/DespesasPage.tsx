@@ -44,6 +44,7 @@ import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded'
 import ReceiptRoundedIcon from '@mui/icons-material/ReceiptRounded'
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded'
 import KeyboardArrowUpRoundedIcon from '@mui/icons-material/KeyboardArrowUpRounded'
+import TuneRoundedIcon from '@mui/icons-material/TuneRounded'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Controller, useForm, useWatch } from 'react-hook-form'
 import {
@@ -52,7 +53,6 @@ import {
   listFiscalItems,
   reopenEntry,
   createEntry,
-  deleteEntry,
   formatCents,
   listEntries,
   listFamilyMembers,
@@ -88,6 +88,15 @@ import { formatDateBR } from '@/utils/dates'
 import { TablePaginationBR } from '@/components/tables/TablePaginationBR'
 import { PageHeader } from '@/features/health/components/PageHeader'
 import { ConfirmDialog } from '@/features/health/components/ConfirmDialog'
+import { DeleteEntryDialog } from '../components/DeleteEntryDialog'
+import { InstallmentsEditor } from '../components/InstallmentsEditor'
+import {
+  addMonthsClamped,
+  buildInstallmentRows,
+  rowsToPayload,
+  validateInstallmentRows,
+  type InstallmentRow,
+} from '../installments'
 import { EmptyState, ErrorState, LoadingState } from '@/features/health/components/StateViews'
 import { useToast } from '@/providers/ToastProvider'
 import { PurchaseEditDialog } from '../components/PurchaseEditDialog'
@@ -153,6 +162,8 @@ type EntryFormValues = {
   recurrence: EntryInput['recurrence']
   installments: boolean
   installments_count: string
+  /** Número da parcela que vence em due_date (1 = a série começa nela). */
+  installment_current: string
   confirm_past: boolean
   description: string
   notes: string
@@ -172,6 +183,7 @@ function emptyEntryForm(): EntryFormValues {
     recurrence: 'none',
     installments: false,
     installments_count: '2',
+    installment_current: '1',
     confirm_past: false,
     description: '',
     notes: '',
@@ -615,6 +627,7 @@ function EntryFormDialog({
           recurrence: entry.recurrence,
           installments: false,
           installments_count: '2',
+          installment_current: '1',
           confirm_past: false,
           description: entry.description,
           notes: entry.notes ?? '',
@@ -627,7 +640,30 @@ function EntryFormDialog({
   const installments = useWatch({ control, name: 'installments' })
   const amountText = useWatch({ control, name: 'amount' })
   const installmentsCount = useWatch({ control, name: 'installments_count' })
+  const installmentCurrent = useWatch({ control, name: 'installment_current' })
   const dueDateText = useWatch({ control, name: 'due_date' })
+  // Editor parcela a parcela: aberto, a lista é o que vale no submit.
+  const [editorOpen, setEditorOpen] = useState(false)
+  const [installmentRows, setInstallmentRows] = useState<InstallmentRow[]>([])
+
+  // Vencimento da 1ª parcela: a data informada é a da parcela nº
+  // installment_current, então a série começa (current - 1) meses antes.
+  const firstDueDate = useMemo(() => {
+    if (!installments || !dueDateText) return dueDateText
+    const cur = Math.trunc(Number(installmentCurrent))
+    if (!Number.isFinite(cur) || cur <= 1) return dueDateText
+    return addMonthsClamped(dueDateText, -(cur - 1))
+  }, [installments, dueDateText, installmentCurrent])
+
+  const regenerateRows = () => {
+    const n = Math.trunc(Number(installmentsCount))
+    const count = Number.isFinite(n) && n >= 2 ? n : 2
+    setInstallmentRows(buildInstallmentRows(firstDueDate, count, reaisToCents(amountText ?? '')))
+  }
+  const openEditor = () => {
+    regenerateRows()
+    setEditorOpen(true)
+  }
   const applyToFuture = useWatch({ control, name: 'apply_to_future' })
   const [resizeTotal, setResizeTotal] = useState('')
   const [resizeArmed, setResizeArmed] = useState(false)
@@ -660,13 +696,19 @@ function EntryFormDialog({
     const n = Math.trunc(Number(installmentsCount))
     const per = reaisToCents(amountText ?? '')
     if (!installments || !Number.isFinite(n) || n < 2 || per <= 0) return ''
-    return `${n}× de ${formatCents(per)} = ${formatCents(per * n)} no total.`
-  }, [installments, installmentsCount, amountText])
+    const fmt = (iso: string) => {
+      const [y, m, d] = iso.split('-')
+      return `${d}/${m}/${y}`
+    }
+    const range = firstDueDate ? ` De ${fmt(firstDueDate)} a ${fmt(addMonthsClamped(firstDueDate, n - 1))}.` : ''
+    return `${n}× de ${formatCents(per)} = ${formatCents(per * n)} no total.${range}`
+  }, [installments, installmentsCount, amountText, firstDueDate])
 
   const isPastDate = useMemo(() => {
-    if (!dueDateText) return false
-    return dueDateText < new Date().toISOString().slice(0, 10)
-  }, [dueDateText])
+    const ref = installments ? firstDueDate : dueDateText
+    if (!ref) return false
+    return ref < new Date().toISOString().slice(0, 10)
+  }, [installments, firstDueDate, dueDateText])
 
   const mutation = useMutation({
     mutationFn: async (values: EntryFormValues) => {
@@ -684,10 +726,24 @@ function EntryFormDialog({
         supplier_id: values.supplier_id || null,
       }
       if (!isEdit && values.installments) {
-        const n = Number(values.installments_count)
-        base.installments_total = Number.isFinite(n) && n >= 2 ? Math.trunc(n) : 2
+        if (editorOpen) {
+          // Lista ajustada à mão: cada parcela leva vencimento, valor e
+          // liquidação próprios; o backend numera por vencimento.
+          const problem = validateInstallmentRows(installmentRows)
+          if (problem) throw new Error(problem)
+          const sorted = installmentRows.slice().sort((a, b) => a.due_date.localeCompare(b.due_date))
+          base.installments = rowsToPayload(sorted)
+          base.installments_total = sorted.length
+          base.due_date = sorted[0].due_date
+          base.amount_cents = reaisToCents(sorted[0].amount)
+        } else {
+          const n = Number(values.installments_count)
+          base.installments_total = Number.isFinite(n) && n >= 2 ? Math.trunc(n) : 2
+          // "Esta é a parcela nº X": a série começa X-1 meses antes.
+          base.due_date = firstDueDate
+        }
       }
-      if (!isEdit && values.confirm_past) {
+      if (!isEdit && values.confirm_past && !editorOpen) {
         base.confirm_past_occurrences = true
       }
       if (isEdit) {
@@ -720,6 +776,8 @@ function EntryFormDialog({
       }
       qc.invalidateQueries({ queryKey: financeKeys.all })
       reset(emptyEntryForm())
+      setEditorOpen(false)
+      setInstallmentRows([])
       onClose()
       if (!isEdit && created > 1) onCreatedRecurring(created)
     },
@@ -981,7 +1039,11 @@ function EntryFormDialog({
                     control={
                       <Switch
                         checked={field.value}
-                        onChange={(e) => field.onChange(e.target.checked)}
+                        onChange={(e) => {
+                          field.onChange(e.target.checked)
+                          // Desligar o parcelado descarta o editor aberto.
+                          if (!e.target.checked) setEditorOpen(false)
+                        }}
                       />
                     }
                     label="Parcelado"
@@ -1006,7 +1068,40 @@ function EntryFormDialog({
                       fullWidth
                       inputProps={{ min: 2 }}
                       error={Boolean(errors.installments_count)}
-                      helperText={errors.installments_count?.message}
+                      helperText={
+                        errors.installments_count?.message ??
+                        (editorOpen ? 'Editor aberto: vale a lista abaixo' : undefined)
+                      }
+                    />
+                  )}
+                />
+              )}
+              {installments && (
+                <Controller
+                  name="installment_current"
+                  control={control}
+                  rules={{
+                    validate: (v) => {
+                      if (!installments) return true
+                      const cur = Math.trunc(Number(v))
+                      const n = Math.trunc(Number(installmentsCount))
+                      if (!Number.isFinite(cur) || cur < 1) return 'Mínimo 1'
+                      if (Number.isFinite(n) && cur > n) return 'Maior que o total'
+                      return true
+                    },
+                  }}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      type="number"
+                      label="A data acima é a parcela nº"
+                      fullWidth
+                      inputProps={{ min: 1 }}
+                      error={Boolean(errors.installment_current)}
+                      helperText={
+                        errors.installment_current?.message ??
+                        (Number(installmentCurrent) > 1 ? 'As anteriores são geradas para trás' : undefined)
+                      }
                     />
                   )}
                 />
@@ -1014,8 +1109,16 @@ function EntryFormDialog({
             </Stack>
           )}
 
-          {!isEdit && installments && (
-            <Alert severity="info" icon={<RepeatRoundedIcon />}>
+          {!isEdit && installments && !editorOpen && (
+            <Alert
+              severity="info"
+              icon={<RepeatRoundedIcon />}
+              action={
+                <Button size="small" color="inherit" startIcon={<TuneRoundedIcon />} onClick={openEditor}>
+                  Ajustar parcelas
+                </Button>
+              }
+            >
               Ao salvar, o sistema gera as <strong>parcelas mensais</strong> previstas (X/N).
               {installmentsSummary && (
                 <>
@@ -1026,6 +1129,30 @@ function EntryFormDialog({
             </Alert>
           )}
 
+          {!isEdit && installments && editorOpen && (
+            <Stack spacing={1.5}>
+              <Alert
+                severity="info"
+                icon={<TuneRoundedIcon />}
+                action={
+                  <Button size="small" color="inherit" onClick={() => setEditorOpen(false)}>
+                    Voltar ao automático
+                  </Button>
+                }
+              >
+                Ajuste vencimento e valor de cada parcela. Marque <strong>Paga</strong> nas que já
+                foram quitadas (data e valor pago) — elas nascem realizadas. A lista abaixo é o que
+                será criado; número e valor do formulário deixam de valer.
+              </Alert>
+              <InstallmentsEditor
+                rows={installmentRows}
+                onChange={setInstallmentRows}
+                onRegenerate={regenerateRows}
+                disabled={mutation.isPending}
+              />
+            </Stack>
+          )}
+
           {!isEdit && !installments && recurrence !== 'none' && (
             <Alert severity="info" icon={<RepeatRoundedIcon />}>
               Ao salvar, o sistema gera os lançamentos <strong>previstos</strong> dos próximos 12
@@ -1034,7 +1161,7 @@ function EntryFormDialog({
             </Alert>
           )}
 
-          {!isEdit && (installments || recurrence !== 'none') && isPastDate && (
+          {!isEdit && (installments || recurrence !== 'none') && isPastDate && !editorOpen && (
             <Controller
               name="confirm_past"
               control={control}
@@ -1189,18 +1316,6 @@ export default function DespesasPage() {
     queryFn: () => listEntries(listParams),
   })
 
-  const deleteMutation = useMutation({
-    mutationFn: (id: string) => deleteEntry(id),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: financeKeys.all })
-      setToDelete(null)
-      show('Despesa excluída.')
-    },
-    onError: (err) => {
-      setToDelete(null)
-      show(errorMessage(err), 'error')
-    },
-  })
   const reopenMutation = useMutation({
     mutationFn: (id: string) => reopenEntry(id),
     onSuccess: () => {
@@ -1642,14 +1757,9 @@ export default function DespesasPage() {
         />
       )}
 
-      <ConfirmDialog
-        open={Boolean(toDelete)}
-        title="Excluir despesa"
-        description={`Excluir "${toDelete?.description}"? Esta ação não pode ser desfeita.`}
-        loading={deleteMutation.isPending}
-        onConfirm={() => toDelete && deleteMutation.mutate(toDelete.id)}
-        onClose={() => setToDelete(null)}
-      />
+      {toDelete && (
+        <DeleteEntryDialog entry={toDelete} kindLabel="despesa" onClose={() => setToDelete(null)} />
+      )}
 
       {toCancel && <CancelEntryDialog entry={toCancel} onClose={() => setToCancel(null)} />}
 
