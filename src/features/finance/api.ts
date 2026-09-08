@@ -190,6 +190,21 @@ export type EntryInput = {
   apply_to?: 'one' | 'future'
   /** Lançamento retroativo: ocorrências vencidas nascem realizadas. */
   confirm_past_occurrences?: boolean
+  /**
+   * Parcelas informadas uma a uma (editor de parcelamento). Substitui a
+   * progressão mensal automática; o tamanho da lista define o total.
+   */
+  installments?: EntryInstallmentInput[]
+}
+
+/** Uma parcela do editor de parcelamento (create). */
+export type EntryInstallmentInput = {
+  due_date: string // YYYY-MM-DD
+  amount_cents: number
+  /** Presente: a parcela nasce realizada, paga nessa data. */
+  paid_at?: string | null
+  /** Valor efetivamente pago; default = amount_cents. */
+  paid_amount_cents?: number | null
 }
 
 export type ListEntriesParams = {
@@ -208,6 +223,8 @@ export type ListEntriesParams = {
   due_to?: string
   overdue?: boolean
   supplier_id?: string
+  /** Série inteira (parcelas/ocorrências) de um grupo. */
+  recurrence_group_id?: string
   limit?: number
   offset?: number
 }
@@ -517,8 +534,29 @@ export async function updateEntry(
   return data
 }
 
-export async function deleteEntry(id: string): Promise<void> {
-  await meufinClient.delete(`${BASE}/entries/${id}`)
+/**
+ * Alcance da exclusão em série:
+ * - one: só este lançamento (default);
+ * - future: este + previstas com vencimento a partir dele. Em recorrência o
+ *   lançamento vira cancelado (encerramento) para o extensor não recriar os
+ *   meses apagados;
+ * - all: a série inteira, inclusive parcelas já pagas.
+ */
+export type DeleteScope = 'one' | 'future' | 'all'
+
+export type DeleteEntryResult = {
+  scope: DeleteScope
+  deleted: number
+  deleted_paid: number
+  deleted_residuals: number
+  recurrence_ended: boolean
+}
+
+export async function deleteEntry(id: string, scope: DeleteScope = 'one'): Promise<DeleteEntryResult> {
+  const { data } = await meufinClient.delete<DeleteEntryResult>(`${BASE}/entries/${id}`, {
+    params: scope !== 'one' ? { scope } : undefined,
+  })
+  return data
 }
 
 /**

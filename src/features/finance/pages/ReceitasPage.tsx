@@ -47,7 +47,6 @@ import {
   reopenEntry,
   createEntry,
   createIncomeSource,
-  deleteEntry,
   formatCents,
   listEntries,
   listFamilyMembers,
@@ -81,6 +80,7 @@ import { formatDateBR } from '@/utils/dates'
 import { TablePaginationBR } from '@/components/tables/TablePaginationBR'
 import { PageHeader } from '@/features/health/components/PageHeader'
 import { ConfirmDialog } from '@/features/health/components/ConfirmDialog'
+import { DeleteEntryDialog } from '../components/DeleteEntryDialog'
 import { EmptyState, ErrorState, LoadingState } from '@/features/health/components/StateViews'
 import { useToast } from '@/providers/ToastProvider'
 
@@ -636,14 +636,6 @@ export default function ReceitasPage() {
       show('Receita confirmada como recebida.')
     },
   })
-  const deleteMutation = useMutation({
-    mutationFn: (id: string) => deleteEntry(id),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: financeKeys.all })
-      setToDelete(null)
-      show('Receita excluída.')
-    },
-  })
   const reopenMutation = useMutation({
     mutationFn: (id: string) => reopenEntry(id),
     onSuccess: () => {
@@ -978,14 +970,9 @@ export default function ReceitasPage() {
         />
       )}
 
-      <ConfirmDialog
-        open={Boolean(toDelete)}
-        title="Excluir receita"
-        description={`Excluir "${toDelete?.description}"? Esta ação não pode ser desfeita.`}
-        loading={deleteMutation.isPending}
-        onConfirm={() => toDelete && deleteMutation.mutate(toDelete.id)}
-        onClose={() => setToDelete(null)}
-      />
+      {toDelete && (
+        <DeleteEntryDialog entry={toDelete} kindLabel="receita" onClose={() => setToDelete(null)} />
+      )}
 
       {toCancel && <CancelEntryDialog entry={toCancel} onClose={() => setToCancel(null)} />}
 
